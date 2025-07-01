@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <sys/syscall.h>
 #include <termios.h>
+#include "editor.h"
 
 
 void die(const char *s) {
@@ -19,7 +20,7 @@ void enableRawMode() {
   atexit(disableRawMode);
   struct termios raw = orig_termios;//复制后进行后续操作
 //超时设置
-  raw.c_cc[VMIN] = 0;
+  raw.c_cc[VMIN] = 1;
   raw.c_cc[VTIME] = 10;
 //设置原始模式
   raw.c_iflag &= ~(BRKINT | INPCK | ISTRIP | IXON);
