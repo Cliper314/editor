@@ -9,10 +9,11 @@ int main(int argc,char *argv[]) {
     char c = '\0';
     if (read(STDIN_FILENO, &c, 1) == -1) die("read");
     if (iscntrl(c)) {
-      printf("%d\r\n", c);
+      printf("%d", c);
     } else {
-      printf("%d ('%c')\r\n", c, c);
+      printf("%d ('%c')", c, c);
     }
+    fflush(stdout);
     if (c == 'q') break;
   }
     return 0;
