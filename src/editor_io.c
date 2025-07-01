@@ -23,6 +23,15 @@ void add_row(row *rows, int *num_rows, const char *content_in) {
     (*num_rows)++;
 }
 
+void print_row(const row *r) {
+    if (r->content) {
+        printf("Row content: %s\n", r->content);
+        printf("Row capacity: %d\n", r->capacity);
+    } else {
+        printf("Row is empty.\n");
+    }
+}
+
 void initialize_row(row *r) {
     r->content = NULL;
     r->count = 0;
