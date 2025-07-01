@@ -67,12 +67,24 @@ void read_keyboard_input(row *rows, int *num_rows) {
             }
 
             switch (c) {
-                case 'A':printf("Up arrow detected\n");break;
-                case 'B':printf("Down arrow detected\n");break;
-                case 'C':printf("Right arrow detected\n");break;
-                case 'D':printf("Left arrow detected\n");break;
-                case 'F':printf("End key detected\n");break;
-                case 'H':printf("Home key detected\n");break;
+            case 'A':printf("Up arrow detected\n");break;
+            case 'B':printf("Down arrow detected\n");break;
+            case 'C':printf("Right arrow detected\n");break;
+            case 'D':printf("Left arrow detected\n");break;
+            case 'F':printf("End key detected\n");break;
+            case 'H':printf("Home key detected\n");break;
+            case 53:if(read(STDIN_FILENO, &c, 1) == -1) {
+                    perror("read");
+                    exit(EXIT_FAILURE);
+                }
+                if (c == '~')
+                    printf("Page Up key detected\n");break;
+            case 54:if(read(STDIN_FILENO, &c, 1) == -1) {
+                    perror("read");
+                    exit(EXIT_FAILURE);
+                }
+                if (c == '~') 
+                    printf("Page Down key detected\n");break;
             }
             continue; // 跳过控制字符
             
