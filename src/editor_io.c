@@ -1,5 +1,7 @@
 #include "editor_io.h"
-
+#include <ctype.h>
+#include <stdio.h>
+#include <unistd.h>
 
 void add_row(row *rows, int *num_rows, const char *content_in) {
     if (*num_rows >= rows->capacity) {
@@ -38,3 +40,60 @@ void initialize_row(row *r) {
     r->lenth = 0;
     r->capacity = INIT_CAPACITY; // 初始化容量
 }
+
+void read_keyboard_input(row *rows, int *num_rows) {
+    char c;
+    char tem_row[MAX_LENGTH];
+    int i = 0;
+
+    while (1) {
+        if (read(STDIN_FILENO, &c, 1) == -1) {
+            perror("read");
+            exit(EXIT_FAILURE);
+        }
+
+        if (c == 27) {
+            if (read(STDIN_FILENO, &c, 1) == -1) {
+                perror("read");
+                exit(EXIT_FAILURE);
+            }
+            else if (c == '[') {
+                if (read(STDIN_FILENO, &c, 1) == -1) {
+                    perror("read");
+                    exit(EXIT_FAILURE);
+                }
+            } else {
+                printf("Escaped character detected: %d\n", c);
+            }
+
+            switch (c) {
+                case 'A':printf("Up arrow detected\n");break;
+                case 'B':printf("Down arrow detected\n");break;
+                case 'C':printf("Right arrow detected\n");break;
+                case 'D':printf("Left arrow detected\n");break;
+                case 'F':printf("End key detected\n");break;
+                case 'H':printf("Home key detected\n");break;
+            }
+            continue; // 跳过控制字符
+            
+        }
+
+        if (iscntrl(c)) {
+            printf("%d", c);
+        } else {
+            printf("%d ('%c')", c, c);
+        }
+        fflush(stdout);
+
+        if (c != '\n') {
+            tem_row[i++] = c; // 将输入字符添加到临时行
+        } else {
+            tem_row[i] = '\0'; // 结束字符串
+            i = 0;
+            add_row(rows, num_rows, tem_row); // 添加行到rows
+        }
+
+        if (c == 'q') break; // 退出条件
+    }
+}
+
